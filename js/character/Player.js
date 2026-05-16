@@ -1,17 +1,17 @@
 import { Character } from "./Character.js";
 
 export class Player  extends Character{
-    constructor(x, y) {
+    constructor(x, y,) {
         super(x, y);
-        this.elemento = document.querySelector("#character");
+        this.elemento = document.querySelector("#player");
         this.estado = "idle";
         this.posX = this.origenX;
         this.posY = this.origenY;
         this.velocidad = 0;
         this.isJumping = false;
         this.velY = 0;
-        this.gravedad = 0.6; 
-        this.jumpForce = 12; 
+        this.gravedad = 0.5; 
+        this.jumpForce = 14; 
     }
 
     init() {
@@ -20,17 +20,19 @@ export class Player  extends Character{
         this.elemento.classList.replace("inactive", "idle");
     }
 
-    move() {
-        this.posX += this.velocidad;
-        this.elemento.style.left = this.posX + "px";
-    }
-
     jump() {
         if (this.isJumping) return;
         this.isJumping = true;
         this.velY = -this.jumpForce; // impulso hacia arriba
         this.setEstado("jump-up");
     }
+
+    /**
+     * Actualizacion de salto. Verifica el estado del salto para mostar la animacion correspondiente
+     * y ubicar al elemento en el lugar adecuado.
+     * 
+     * @returns corta en caso de que no este saltando (evita salto constante)
+     */
 
     updateJump() {
         if (!this.isJumping) {
@@ -52,7 +54,14 @@ export class Player  extends Character{
         }
 
         this.elemento.style.top = this.posY + "px";
-}
+    }
+
+    /**
+     * @param {String} estado - actividad del personaje
+     * 
+     * Modifica clases del elemento segun el estado, controlando asi
+     * el cambio de animaciones según corresponda.
+     */
 
     setEstado(estado) {
         if (estado === this.estado) return;

@@ -1,3 +1,5 @@
+import { Character } from "./character/character.js";
+import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
 
 export class Game{
@@ -14,7 +16,14 @@ export class Game{
         this.handleInput();
         this.handlePlayer();
         this.handleColision();
+
+        if (Math.random() < 0.001) { 
+            this.spawnEnemy(1300, 540);
+        }
+
+        this.enemies.forEach(enemy => enemy.move());
     }
+
 
     handleInput(){
         if(this.keys.getIsRunning()){
@@ -72,6 +81,12 @@ export class Game{
         //retorno booleano
     }
 
+    spawnEnemy(x, y){
+        let enemigo = new DogEnemy(x, y);
+        enemigo.init();
+
+        this.enemies.push(enemigo);
+    }
 
 
     

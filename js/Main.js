@@ -20,7 +20,7 @@ TILESET.src = "../assets/img/tiles/Terrain(16x16).png";
 let fondoX = 0;
 
 //inicializo jugador con las coordenadas donde se debe dibujar
-const PLAYER = new Player(100, 515, CTX);
+const PLAYER = new Player(100, 520, CTX);
 PLAYER.init();
 let playerX = 100;
 let playerY = 510;

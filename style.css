@@ -90,7 +90,7 @@ body {
 
 /*-------------- PERSONAJE ----------------------*/
 
-#character{
+#player{
     width:54px;
     height:32px;
 
@@ -102,7 +102,7 @@ body {
 
     transform:scale(4);
     transform-origin:top left;
-    z-index: 1;
+    z-index: 2;
 
     image-rendering:pixelated;
 
@@ -175,13 +175,25 @@ body {
 .dogEnemy{
     width: 48px;
     height: 48px;
+    position: absolute;
 
     background-image: url("assets/img/Walk.png");
 
-    transform: scaleX(-1);
     transform: scale(4);
+    z-index: 1;
 
+    animation: dogEnemy 1s steps(6) infinite;
 
+}
 
+@keyframes dogEnemy {
+    0%{
+        background-position: 0px 0px;
+    }
+
+    100%{
+        background-position: -288px 0px;
+    }
+    
 }
 
