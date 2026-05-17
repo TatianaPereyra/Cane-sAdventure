@@ -1,27 +1,38 @@
 import { Character } from "./character/character.js";
 import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
+import { drawLife } from "./Main.js";
 
 export class Game{
     constructor(player){
         this.player = player;
-        this.score = 0;
-        this.enemies = [];
-        this.keys = new KeyController();
         this.estadoJugador = "idle";
 
+        this.score = 0;
+        this.keys = new KeyController();
+        
+        setInterval(() => this.spawnEnemy(), 5000);
+        this.enemies = [];
+
+        setInterval(() => this.spawnChicken(), 2000);
     }
 
     update(){
+        //cuando no tenga vidas corto
+        if(this.player.getVidas() === 0){
+            this.gameOver();
+            return;
+        }
+
+        drawLife();
+
         this.handleInput();
         this.handlePlayer();
         this.handleColision();
 
-        if (Math.random() < 0.001) { 
-            this.spawnEnemy(1300, 540);
-        }
-
+        
         this.enemies.forEach(enemy => enemy.move());
+
     }
 
 
@@ -68,29 +79,62 @@ export class Game{
     }
 
     handleColision(){
+    // enemigos
+    this.enemies.forEach(enemy => {
 
-        //verifico colisiones.(hasColision)
+        if (this.hasColision(this.player, enemy)) {
+           this.enemies = this.enemies.filter(e => e !== enemy);//lo elimino
 
-            //Verifico de enemigos
+            if(enemy.getType() === "dog"){
+                this.player.restLife();
+                this.score -= 100;
+            }
 
-            //Verifico de premios
+           enemy.delete();
+    
+        }
+    });
+
+
+
 
     }
 
-    hasColision(){
-        //retorno booleano
+
+    /**
+     * @param {Character} objA - Primer personaje 
+     * @param {Character} objB - Segundo personaje 
+     * 
+     * Comprueba las coordenadas de los personajes y verifica si estan 
+     * superpuestas para determinar colision
+     * 
+     * @returns - boolean
+     */
+
+    hasColision(objA, objB){
+        return (
+            objA.getRight() > objB.getLeft() &&
+            objA.getLeft() < objB.getRight() &&
+            objA.getBottom() > objB.getTop() &&
+            objA.getTop() < objB.getBottom()
+        );
+        
     }
 
-    spawnEnemy(x, y){
-        let enemigo = new DogEnemy(x, y);
+    spawnEnemy(){
+        let enemigo = new DogEnemy(1300, 540);
         enemigo.init();
 
         this.enemies.push(enemigo);
     }
 
+    spawnChicken(){
+        let chicken = new Chicken();
+        chicken.init();
+    }
 
-    
-
-
+    gameOver(){
+        alert("Perdiste");
+    }
 
 }

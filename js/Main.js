@@ -10,8 +10,6 @@ import { Game } from "./Game.js";
 //-------------------------------------------------------------------------------------------
 const CANVAS = document.querySelector("#canvas"); 
 const CTX = CANVAS.getContext("2d");
-const GROUND_Y = 669; //esquina inferior izquierda en mi pantalla para dibujar
-
 
 //Creacion del suelo
 const TILESET = new Image();
@@ -57,6 +55,15 @@ function renderizar(){
     game.update();
 
     requestAnimationFrame(renderizar);
+}
+
+export function drawLife() {
+    let life = new Image();
+    life.src = "../assets/img/ChickenLeg.png";
+
+    for(let i = 0; i < PLAYER.getVidas(); i++){
+        CTX.drawImage(life, 20 + i * 40, 20, 40, 40)
+    }
 
 }
 
