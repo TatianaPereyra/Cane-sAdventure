@@ -1,37 +1,51 @@
-import { Character } from "./character/character.js";
+import { Character } from "./character/Character.js";
+import { Chicken } from "./character/Chicken.js";
 import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
 import { drawLife } from "./Main.js";
+import { showScore } from "./Main.js";
 
 export class Game{
     constructor(player){
         this.player = player;
         this.estadoJugador = "idle";
+        this.margenX = 900; //cuantos px puede avanzar el jugador hasta que comience a avanzar la pantalla
 
+        this.scroll = 0; //desplazamiento para el fondo
         this.score = 0;
         this.keys = new KeyController();
-        
-        setInterval(() => this.spawnEnemy(), 5000);
-        this.enemies = [];
 
+        this.premios = [];
         setInterval(() => this.spawnChicken(), 2000);
+
+        this.enemies = [];
+        this.spawnEnemy();
+
     }
 
-    update(){
+    gameLoop(){
         //cuando no tenga vidas corto
         if(this.player.getVidas() === 0){
             this.gameOver();
             return;
         }
 
+        if(this.score < 0){
+            this.score = 0;
+        }
+
         drawLife();
+        showScore(this.score);
 
         this.handleInput();
         this.handlePlayer();
         this.handleColision();
 
         
-        this.enemies.forEach(enemy => enemy.move());
+        this.enemies.forEach(enemy => {
+            enemy.setVelocidad(-5 - this.scroll);
+            enemy.move();
+        });
 
     }
 
@@ -53,7 +67,6 @@ export class Game{
     }
 
     handlePlayer(){
-
         switch(this.estadoJugador){
             case "idle": 
                 this.player.setEstado("idle");
@@ -67,6 +80,14 @@ export class Game{
                 this.player.setEstado("running")
                 this.player.setVelocidad(5);
                 break;
+        }
+
+        if (this.player.posX < this.margenX) {
+        this.player.move();
+        this.scroll = 0;
+        } else {
+            this.player.posX = this.margenX;
+            this.scroll = this.player.velocidad;
         }
 
         if(this.keys.getIsJumping()){
@@ -95,8 +116,15 @@ export class Game{
         }
     });
 
+    this.premios.forEach(premio => {
+        if(this.hasColision(this.player, premio)){
+            this.premios = this.premios.filter(e => e !== premio);
 
+            this.score += 100;
 
+            premio.delete();
+        }
+    });
 
     }
 
@@ -119,22 +147,35 @@ export class Game{
             objA.getTop() < objB.getBottom()
         );
         
+        
     }
 
+    /**
+     * Genera enemigos de manera aleatoria con un tiempo de intervalo de minimo 5 segundos
+     */
     spawnEnemy(){
-        let enemigo = new DogEnemy(1300, 540);
+        let enemigo = new DogEnemy(1400, 540);
         enemigo.init();
 
         this.enemies.push(enemigo);
+
+        let intervalo = 5000 + Math.random() * 1000;
+        setTimeout(() => this.spawnEnemy(), intervalo);
     }
 
     spawnChicken(){
-        let chicken = new Chicken();
+        let chicken = new Chicken(900, 560);
+        this.premios.push(chicken);
+
         chicken.init();
     }
 
     gameOver(){
-        alert("Perdiste");
+        //finaliza el juego
+    }
+
+    getScroll(){
+        return this.scroll;
     }
 
 }

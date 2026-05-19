@@ -14,7 +14,7 @@ body {
     position:absolute;
     top:0;
     left:0;
-    z-index: 0;
+    z-index: 1;
 
     image-rendering:pixelated;
 }
@@ -102,7 +102,7 @@ body {
 
     transform:scale(4);
     transform-origin:top left;
-    z-index: 2;
+    z-index: 3;
 
     image-rendering:pixelated;
 
@@ -180,7 +180,7 @@ body {
     background-image: url("assets/img/Walk.png");
 
     transform: scale(4);
-    z-index: 1;
+    z-index: 2;
 
     animation: dogEnemy 1s steps(6) infinite;
 
@@ -197,3 +197,27 @@ body {
     
 }
 
+
+/*-------------PREMIO--------------------------*/
+
+.chicken{
+    width: 48px;
+    height: 48px;
+    position: absolute;
+
+    background-image: url("assets/img/chicken-idle.png");
+
+    transform: scale(2);
+
+    animation: chicken 1s steps(2) infinite;
+}
+
+@keyframes chicken {
+    0%{
+        background-position: 0px;
+    }
+
+    100%{
+        background-position: 98px;
+    }
+}

@@ -5,16 +5,19 @@ export class Player  extends Character{
         super(x, y);
         this.elemento = document.querySelector("#player");
         this.estado = "idle";
+        this.vidas = 3;
 
         this.isJumping = false;
         this.velY = 0;
         this.gravedad = 0.5; 
-        this.jumpForce = 14; 
+        this.jumpForce = 16; 
 
         //guarda sus dimensiones para las colisiones (medidas del sprite * escala)
         this.scale = 4;
         this.width = 54 * this.scale;
         this.height = 32 * this.scale;
+        this.offsetX = 40;
+        this.offsetY = 60;
     }
 
 
@@ -72,10 +75,6 @@ export class Player  extends Character{
         this.elemento.classList.remove(this.estado);
         this.elemento.classList.add(estado);
         this.estado = estado;
-    }
-
-    setVelocidad(numero) {
-        this.velocidad = numero;
     }
 
     restLife(){

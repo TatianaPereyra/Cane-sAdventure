@@ -8,6 +8,56 @@
 </head>
 <body>
 
+    <!---------------------------------------------MENU------------------------------------------------->
+    <div id="menu">
+
+        <div id="start-content">
+
+            <ul>
+                <li>
+                    <h1>Cane's Adventure</h1>
+                </li>
+
+                <li>
+                    <button id="start">Start Game</button>
+                </li>
+
+                <li>
+                    <button id="instructions">Instructions</button>
+                </li>
+            </ul>
+
+        </div>
+
+        <div id="instructions">
+
+            <ul>
+                <li> 
+                    <h2>How to Play</h2>
+                </li>
+
+                <li>Press ArrowUp o Space Bar for Jump, press ArrowRight or D for walk and pres shift + ArrowRigut/D for run</li>
+                <li>The game's objetive is go to the finish line before the time out, and trying to colect the most number
+                    of prices (chicken) for get a better score.
+                </li>
+                <li>The dogs provokes that you loss 100 point and a life</li>
+                <li>You got 3 lifes, if u loses all of these, you're going to loss</li>
+                
+                <li>
+                    <h3>Some TIPS:</h3>
+                </li>
+
+                <li>For a better Jump, you must be runnign before jump</li>
+                <li>After jump, if u want to run again, u need to press the keys again</li>
+                <li>Be careful with the dogs</li>
+            </ul>
+
+        </div>
+    </div>
+
+
+    <!-------------------------------------------GAME-------------------------------------------------->
+    
     <div id="main-container">
 
         <div id="sky-background"></div>
@@ -16,12 +66,11 @@
         <div id="nubesB"></div>
 
         <div id="player" class="inactive"></div>
+        <div id="chicken"></div>
         <div id="enemies"></div>
         <canvas id="canvas" width="1280" height="720"></canvas>
 
     </div>
-
-
 
     <script type="module" src="./js/Main.js"></script>
 </body>

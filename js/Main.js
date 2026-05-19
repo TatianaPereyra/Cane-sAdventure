@@ -13,9 +13,16 @@ const CTX = CANVAS.getContext("2d");
 
 //Creacion del suelo
 const TILESET = new Image();
-TILESET.src = "../assets/img/tiles/Terrain(16x16).png";
+TILESET.src = "../assets/img/tiles/tiles.png";
 
-let fondoX = 0;
+let fondoX = 0; //donde comienzo a crear el suelo
+
+let tiles = [];
+let cantidadTiles = Math.ceil(CANVAS.width / 128) + 2;
+
+for (let i = 0; i < cantidadTiles; i++) {
+    tiles.push(i * 128);
+}
 
 //inicializo jugador con las coordenadas donde se debe dibujar
 const PLAYER = new Player(100, 520, CTX);
@@ -34,26 +41,34 @@ TILESET.onload = () => {
 };
 
 
-function renderizar(){
-    CTX.imageSmoothingEnabled = false;
-    CTX.clearRect(0,0,CANVAS.width,CANVAS.height);
+//-------------------------------------------------------------------------------------------
+//                                     PARTIDA 
+//-------------------------------------------------------------------------------------------
 
-    // cantidad necesaria para llenar pantalla
-    let cantidadTiles = Math.ceil(CANVAS.width / 128) + 2;
+function generateFloor(offset){
+    for (let i = 0; i < cantidadTiles; i++) {
+        let x = Math.round(i * 128 - offset);
 
-    for(let i = 0; i < cantidadTiles; i++){
-
-        CTX.drawImage(TILESET, 
-            97, 1, //coordenadas dentro del tileSet
-            46, 46, //tamaño del tile
-            fondoX + (i * 128), 600, //donde empiezo a dibujar
-            128, 128 //tamaño visual final
+        CTX.drawImage(
+            TILESET,
+            0, 0, 30, 30, //tile
+            x, 600, //posicion en pantalla
+            128,128//tamaño visual final
         );
-
     }
 
-    game.update();
+}
 
+function renderizar() {
+    CTX.imageSmoothingEnabled = false;
+    CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
+
+    fondoX += game.getScroll();
+    let offset = fondoX % 128;
+
+    generateFloor(offset);
+   
+    game.gameLoop();
     requestAnimationFrame(renderizar);
 }
 
@@ -62,10 +77,15 @@ export function drawLife() {
     life.src = "../assets/img/ChickenLeg.png";
 
     for(let i = 0; i < PLAYER.getVidas(); i++){
-        CTX.drawImage(life, 20 + i * 40, 20, 40, 40)
+        CTX.drawImage(life, 20 + i * 40, 20, 60, 60)
     }
 
 }
 
+export function showScore(score) {
+    CTX.fillStyle = "white";
+    CTX.font = "30px Arial";
+    CTX.fillText("Score: " + score, CANVAS.width - 150, 50);
+}
 
-renderizar();
+

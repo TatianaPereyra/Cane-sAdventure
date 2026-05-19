@@ -4,15 +4,15 @@ export class DogEnemy extends Character{
     constructor(x, y){
         super(x, y);
         this.contenedor = null;
-
         this.velocidad = -5; //velocidad por defecto (hacia la izquierda)
         this.elemento = null;
-
         this.type = "dog";
 
         this.scale = 4;
         this.width = 48 * this.scale;
         this.height = 48 * this.scale;
+        this.offsetX = 20;
+        this.offsetY = 20;
     }
 
     init(){

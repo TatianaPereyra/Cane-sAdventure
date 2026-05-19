@@ -4,7 +4,6 @@ export class Character{
     constructor(x, y){
         this.origenX = x;
         this.origenY = y;
-        this.vidas = 3;
     
         this.elemento = null;
         this.posX = this.origenX;
@@ -14,8 +13,8 @@ export class Character{
         this.scale = 0;
         this.width = 0;
         this.height = 0;
-        this.offsetX = 20;
-        this.offsetY = 25;
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     init(){
@@ -41,6 +40,10 @@ export class Character{
 
     getRight(){
         return this.posX + this.width - this.offsetX;
+    }
+
+    setVelocidad(velocidad){
+        this.velocidad = velocidad;
     }
 
     
