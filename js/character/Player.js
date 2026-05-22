@@ -6,9 +6,11 @@ export class Player  extends Character{
         this.elemento = document.querySelector("#player");
         this.estado = "idle";
         this.vidas = 3;
+        this.currentPlatform = null;
 
         this.isJumping = false;
         this.velY = 0;
+        this.prevY = this.posY;
         this.gravedad = 0.5; 
         this.jumpForce = 16; 
 
@@ -53,7 +55,15 @@ export class Player  extends Character{
             this.setEstado("jump-down");
         }
 
-        if (this.posY >= this.origenY) {
+        // si está en una plataforma actual, no lo dejes caer hasta el origen
+        if (this.currentPlatform) {
+            if (this.posY + this.height >= this.currentPlatform.y) {
+                this.posY = this.currentPlatform.y - this.height;
+                this.isJumping = false;
+                this.velY = 0;
+                this.setEstado("idle");
+            }
+        } else if (this.posY >= this.origenY) {
             this.posY = this.origenY;
             this.isJumping = false;
             this.velY = 0;
@@ -88,5 +98,17 @@ export class Player  extends Character{
 
     getVidas(){
         return this.vidas;
+    }
+
+    setCurrentPlatform(platform){
+        this.currentPlatform = platform;
+    }
+
+    getCurrentPlatform(){
+        return this.currentPlatform;
+    }
+
+    setPrevY(){
+        this.prevY = this.posY;
     }
 }

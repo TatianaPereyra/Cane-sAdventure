@@ -42,9 +42,17 @@ TILESET.onload = () => {
 
 
 //-------------------------------------------------------------------------------------------
-//                                     PARTIDA 
+//                                     INICIALIZACION 
 //-------------------------------------------------------------------------------------------
 
+/**
+ * 
+ * @param {*} offset - desplazamiento del fondo para crear efecto de movimiento continuo. Se calcula a partir de la posición del fondo y el ancho de los tiles.
+ * 
+ * Genera el suelo del juego. Utiliza un tileset para dibujar los tiles del suelo en el canvas. 
+ * El desplazamiento del fondo se calcula a partir de la posición actual del fondo y el ancho de los tiles para crear un efecto de movimiento continuo.
+ * Se generan los necesarios para cubrir el canvas y algunos adicionales para evitar que se vean espacios vacíos al moverse.
+ */
 function generateFloor(offset){
     for (let i = 0; i < cantidadTiles; i++) {
         let x = Math.round(i * 128 - offset);
@@ -59,6 +67,36 @@ function generateFloor(offset){
 
 }
 
+/**
+ * Genera las plataformas y las posiciona de acuerdo a sus coordenadas. 
+ * Solo se muestran si están dentro del área visible o a punto de entrar.
+ */
+function generatePlataformas() {
+    game.getPlatforms().forEach(p => {
+        if (!p.elemento) {
+            let el = document.createElement("div");
+            el.classList.add("platform");
+            el.style.position = "absolute";
+            document.querySelector("#platforms").appendChild(el);
+            p.elemento = el;
+        }
+        
+        p.elemento.style.left = (p.x - game.getScroll()) + "px";
+        p.elemento.style.top = p.y + "px";
+        p.elemento.style.width = p.width + "px";
+        p.elemento.style.height = p.height + "px";
+
+        // Solo mostrar si está en pantalla o a punto de entrar
+        if (p.x - game.getScroll() < CANVAS.width + 200 && 
+            p.x - game.getScroll() + p.width > -200) {
+            p.elemento.style.display = "block";
+        } else {
+            p.elemento.style.display = "none";
+        }
+    });
+}
+
+//Renderizado del juego. Se encarga de dibujar el fondo, las plataformas y el jugador en cada frame.
 function renderizar() {
     CTX.imageSmoothingEnabled = false;
     CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
@@ -67,11 +105,13 @@ function renderizar() {
     let offset = fondoX % 128;
 
     generateFloor(offset);
-   
+    generatePlataformas();
+
     game.gameLoop();
     requestAnimationFrame(renderizar);
 }
 
+//Dibuja la cantidad de vidas del jugador
 export function drawLife() {
     let life = new Image();
     life.src = "../assets/img/ChickenLeg.png";
@@ -82,6 +122,7 @@ export function drawLife() {
 
 }
 
+//Dibuja el puntaje del jugador
 export function showScore(score) {
     CTX.fillStyle = "white";
     CTX.font = "30px Arial";

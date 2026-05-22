@@ -65,6 +65,15 @@ body {
 
 }
 
+.platform {
+    position: absolute;
+    background-image: url("assets/img/tiles/tiles.png");
+    background-position: 32px 0px;
+    background-size: auto 100%;  /* 👈 Agrega esto */
+    image-rendering: pixelated;
+}
+     
+
 @keyframes cielo {
 
     0% {
