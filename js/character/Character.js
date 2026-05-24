@@ -46,5 +46,7 @@ export class Character{
         this.velocidad = velocidad;
     }
 
-    
+    getVelocidad(){
+        return this.velocidad;
+    }   
 }

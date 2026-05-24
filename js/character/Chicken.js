@@ -9,8 +9,8 @@ export class Chicken extends Character{
         this.scale = 2;
         this.width = 48;
         this.height = 48;
-        this.offsetX = 10;
-        this.offsetY = 10;
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     init(){
@@ -32,7 +32,4 @@ export class Chicken extends Character{
         this.contenedor.removeChild(this.elemento); 
     }
 
-
-
-    
 }

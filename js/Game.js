@@ -100,7 +100,6 @@ export class Game{
         }
 
         if (this.player.posX >= this.margenX) {
-
             this.player.posX = this.margenX;
             this.scroll = this.player.velocidad;
 
@@ -162,25 +161,29 @@ export class Game{
             if (this.hasColision(this.player, plataforma)) {
                 // solo si viene cayendo
                 if (this.player.velY >= 0) {
-                    const playerCenterX = this.player.posX + this.player.width / 2;
-                    const onPlatformX =
+                    //calcula el centro horizontal del jugador.
+                    let playerCenterX = this.player.posX + this.player.width / 2;
+                    //verifico si esta dentro de la plataforma en el eje X
+                    let onPlatformX =
                         playerCenterX > plataforma.getLeft() &&
                         playerCenterX < plataforma.getRight();
 
                     if (onPlatformX) {
-                        // se apoya sobre la plataforma
+                        // se apoya sobre la plataforma y detiene su caida
                         this.player.posY = plataforma.getTop() - this.player.height;
                         this.player.isJumping = false;
                         this.player.velY = 0;
                         this.player.setEstado("idle");
-                        this.player.setCurrentPlatform(plataforma);
+                        this.player.setCurrentPlatform(plataforma); //almacena la plataforma actual
                     }
                 }
             }
         });
+
         // después de revisar colisiones, verifico si sigue dentro de la plataforma actual
         if (this.player.currentPlatform) {
             let p = this.player.currentPlatform;
+            //verifico si el jugador se salió por la izquierda o derecha de la plataforma. Si es así, lo dejo caer nuevamente.
             if (this.player.getRight() < p.x || this.player.getLeft() > p.x + p.width) {
                 this.player.isJumping = true;
                 this.player.velY = 1; 
@@ -289,14 +292,13 @@ export class Game{
                 }
             }
             });
-        }
+    }
 
     getPlatforms(){
         return this.plataformas;
     }
 
 
-    
     gameOver(){
         //finaliza el juego
     }

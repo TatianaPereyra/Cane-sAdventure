@@ -25,7 +25,7 @@ for (let i = 0; i < cantidadTiles; i++) {
 }
 
 //inicializo jugador con las coordenadas donde se debe dibujar
-const PLAYER = new Player(100, 520, CTX);
+const PLAYER = new Player(100, 500, CTX);
 PLAYER.init();
 let playerX = 100;
 let playerY = 510;
@@ -47,7 +47,8 @@ TILESET.onload = () => {
 
 /**
  * 
- * @param {*} offset - desplazamiento del fondo para crear efecto de movimiento continuo. Se calcula a partir de la posición del fondo y el ancho de los tiles.
+ * @param {Num} offset - desplazamiento del fondo para crear efecto de movimiento continuo. 
+ * Se calcula a partir de la posición del fondo y el ancho de los tiles.
  * 
  * Genera el suelo del juego. Utiliza un tileset para dibujar los tiles del suelo en el canvas. 
  * El desplazamiento del fondo se calcula a partir de la posición actual del fondo y el ancho de los tiles para crear un efecto de movimiento continuo.
@@ -126,7 +127,7 @@ export function drawLife() {
 export function showScore(score) {
     CTX.fillStyle = "white";
     CTX.font = "30px Arial";
-    CTX.fillText("Score: " + score, CANVAS.width - 150, 50);
+    CTX.fillText("Score: " + score, CANVAS.width - 170, 50);
 }
 
 
