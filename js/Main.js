@@ -15,7 +15,7 @@ const CTX = CANVAS.getContext("2d");
 const TILESET = new Image();
 TILESET.src = "../assets/img/tiles/tiles.png";
 
-const backgorundMusic = new Audio("../assets/audio/HarryStyles-ToBeSoLonely(instrumental).mpeg");
+const backgorundMusic = new Audio("../assets/audio/HarryStyles-CanyonMoon(instrumental).mpeg");
 backgorundMusic.loop = true;
 backgorundMusic.volume = 0.5;
 
@@ -36,8 +36,7 @@ let playerY = 500;
  
 
 //Manejo del juego
-const game = new Game(PLAYER);
-let gameOver = false;
+let game = new Game(PLAYER);
 
 
 
@@ -95,6 +94,25 @@ function generatePlataformas() {
     });
 }
 
+function reiniciarJuego() {
+    // Limpiar DOM
+    document.querySelector("#platforms").innerHTML = "";
+    document.querySelector("#chicken").innerHTML = "";
+    document.querySelector("#enemies").innerHTML = "";
+
+    // Reiniciar player
+    PLAYER.posX = 100;
+    PLAYER.posY = 500;
+    PLAYER.vidas = 3;
+    PLAYER.isJumping = false;
+    PLAYER.velY = 0;
+    PLAYER.currentPlatform = null;
+    PLAYER.setEstado("idle");
+
+    // Recrear el juego
+    game = new Game(PLAYER);
+    fondoX = 0;
+}
 //Renderizado del juego. Se encarga de dibujar el fondo, las plataformas y el jugador en cada frame.
 function renderizar() {
     CTX.imageSmoothingEnabled = false;
@@ -107,7 +125,10 @@ function renderizar() {
     generatePlataformas();
 
     game.gameLoop();
-    requestAnimationFrame(renderizar);
+
+    if(!game.isGameOver) { //corto el loop de renderizado si el juego terminó
+        requestAnimationFrame(renderizar);
+    }
 }
 
 //Dibuja la cantidad de vidas del jugador
@@ -156,10 +177,53 @@ export function showTimer(tiempo) {
     CTX.textBaseline = "alphabetic";
 }
 
+//Muestra la pantalla de Game Over con el puntaje final y el tiempo transcurrido
+export function showGameOverScreen(score, tiempoRestante) {
+    document.querySelector("#final-score").textContent = score;
+    document.querySelector("#final-time").textContent = 90 - tiempoRestante;
+    document.querySelector("#game-over").hidden = false;
+}
+
+//-------------------------------------------------------------------------------------------
+//                               EVENTOS DE BOTONES 
+//-------------------------------------------------------------------------------------------
+
+
+// Inicio de juego
 document.querySelector("#start").addEventListener("click", () => {
     document.querySelector("#menu").hidden = true;
     document.querySelector("#instructions").hidden = true;
     document.querySelector("#main-container").hidden = false;
     backgorundMusic.play();
     renderizar();
+});
+
+// Instrucciones
+document.querySelector("#instructions-btn").addEventListener("click", () => {
+    document.querySelector("#menu").hidden = true;
+    document.querySelector("#instructions").hidden = false;
+});
+
+// Volver al menú desde instrucciones
+document.querySelector("#back").addEventListener("click", () => {
+    document.querySelector("#instructions").hidden = true;
+    document.querySelector("#menu").hidden = false;
+});
+
+// Reiniciar desde game over
+document.querySelector("#restart-btn").addEventListener("click", () => {
+    document.querySelector("#game-over").hidden = true;
+    document.querySelector("#main-container").hidden = false;
+    reiniciarJuego();
+
+    backgorundMusic.currentTime = 0; // reinicia desde el principio
+    backgorundMusic.play();
+    renderizar();
+});
+
+// Volver al menú desde game over
+document.querySelector("#menu-btn").addEventListener("click", () => {
+    document.querySelector("#game-over").hidden = true;
+    document.querySelector("#main-container").hidden = true;
+    document.querySelector("#menu").hidden = false;
 });

@@ -23,19 +23,18 @@
 
                 <div class="description">
                     <p>
-                        El objetivo del juego es obtener la mayor cantidad de puntos posible antes de que
-                        acabe el juego.
+                        ¡Obten la mayor cantidad de puntos antes de que se acabe el tiempo!
                     </p>
                 </div>
             </div>
 
             <div class="buttons">
 
-                <button id="start">
+                <button id="start" class="btn">
                     Comenzar Juego
                 </button>
 
-                <button id="instructions">
+                <button id="instructions-btn" class="btn">
                     Instrucciones
                 </button>
 
@@ -43,29 +42,48 @@
 
         </div>
 
-        <div id="instructions" hidden>
-
-            <ul>
-                <li> 
-                    <h2>Instrucciones</h2>
-                </li>
-
+       <div id="instructions" hidden>
+    
+        <div class="instructions-container">
+            <h2 class="subtittle">Instrucciones</h2>
+                
+            <ul class="instructions-list">
                 <li>Para avanzar, presiona D o  para caminar. Para correr, mantén presionada la tecla Shift junto con la tecla para caminar</li>
                 <li>Para saltar, presiona la barra espaciadora, W o ↑</li>
                 <li>Los perros provocan que pierdas 100 puntos y una vida, ¡Cuidado!</li>
                 <li>Tienes 3 vidas, si pierdes todas, perderás el juego</li>
+            </ul>
 
-                <li>
-                    <h3>Algunos consejos:</h3>
-                </li>
+            <h3 class="subtittle">Algunos consejos:</h3>
 
+            <ul class="instructions-list">
                 <li>Para un mejor salto, debes estar corriendo antes de saltar</li>
                 <li>Después de saltar, si quieres continuar corriendo, necesitas presionar las teclas nuevamente</li>
                 <li>Presta atencion a los enemigos y las diferentes plataformas de juego. ¡Los premios aparecen por todos lados!</li>
             </ul>
 
+            <button id="back" class="btn">
+                Volver al menú
+            </button>
         </div>
-    </div>
+
+        </div>
+
+        <div id="game-over" hidden>
+            <div class="game-over-card">
+                <h1 class="subtittle">GAME OVER</h1>
+                
+                <div class="game-over-stats">
+                    <p>Puntaje: <span id="final-score">0</span></p>
+                    <p>Tiempo jugado: <span id="final-time">0</span>s</p>
+                </div>
+
+                <div class="game-over-buttons">
+                    <button id="restart-btn" class="btn">Volver a jugar</button>
+                    <button id="menu-btn" class="btn">Menú</button>
+                </div>
+            </div>
+        </div>
 
 
     <!-------------------------------------------GAME-------------------------------------------------->

@@ -2,9 +2,7 @@ import { Character } from "./character/Character.js";
 import { Chicken } from "./character/Chicken.js";
 import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
-import { drawLife } from "./Main.js";
-import { showScore } from "./Main.js";
-import { showTimer } from "./Main.js";
+import { drawLife, showScore, showTimer, showGameOverScreen } from "./Main.js";
 import { Platform } from "./Platforms.js";
 
 export class Game{
@@ -12,6 +10,7 @@ export class Game{
         this.player = player;
         this.estadoJugador = "idle";
         this.margenX = 800; //cuantos px puede avanzar el jugador hasta que comience a avanzar la pantalla
+        this.isGameOver = false;
 
         this.scroll = 0; //desplazamiento para el fondo
         this.score = 0;
@@ -38,10 +37,13 @@ export class Game{
      *  la generación y actualización de plataformas, y la verificación de colisiones.
      */
     gameLoop() {
+
         if (this.player.getVidas() === 0) {
             this.gameOver();
             return;
         }
+
+        if (this.isGameOver) return;
 
         if (this.score < 0) this.score = 0;
 
@@ -160,7 +162,7 @@ export class Game{
         this.premios.forEach(premio => {
             if(this.hasColision(this.player, premio)){
                 premio.playSound();
-                
+
                 this.premios = this.premios.filter(e => e !== premio);
 
                 this.score += 100;
@@ -350,7 +352,13 @@ export class Game{
 
 
     gameOver(){
+        this.isGameOver = true;
         this.player.setVidas(0);
+        clearInterval(this.timerInterval);
+
+        if(this.score < 0) this.score = 0;
+
+        showGameOverScreen(this.score, this.tiempoRestante);
     }
 
 }

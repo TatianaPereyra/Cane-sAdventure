@@ -22,10 +22,6 @@ body {
 
 
 /*---------------------MENU------------------------------------*/
-li{
-    list-style: none;
-}
-
 #menu{
     width: 100%;
     height: 100vh;
@@ -35,8 +31,8 @@ li{
     grid-template-rows: 1fr 1fr 1fr;
 
     grid-template-areas: 
-        ". . title"
-        ". . description"
+        ". . info"
+        "buttons . info"
         "buttons . .";
 
     background-image: url("assets/img/fondo/foto1.png");
@@ -49,12 +45,21 @@ li{
     text-align: center;
 }
 
+.info{
+    grid-area: info;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding-right: 100px;
+    gap: 0px;
+}
+
 .title{
     font-size: 50px;
-    margin-top: 0.5em;
-    grid-area: title;
-    gap: 0px;
-    margin-right: 150px;
+
 }
 
 .title h1{
@@ -66,19 +71,175 @@ li{
         #ff5e00
     );
 
+    margin: 0;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-     -webkit-text-stroke: 4px #7a2d00;
+    -webkit-text-stroke: 4px #7a2d00;
 }
 
+.description{
+    margin: 0;
+    font-size: 15px;
+    color: black;
 
+    background: rgba(255, 255, 255, 0.5);
+    padding: 3px;
+    border-radius: 10px;
+}
 
+.buttons{
+    grid-area: buttons;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
+    margin-bottom: 60px;
+    gap: 10px;
+}
 
+.btn{
+    width: 200px;
+    height: 50px;
 
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 20px;
+    color: white;
 
+     background: linear-gradient(
+        to bottom,
+        #ffffff,
+        #ffe066,
+        #ff9900,
+        #ff5e00
+    );
+    border: 2px solid #7a2d00;
+    border-radius: 10px;
 
+    cursor: pointer;
+}
+
+button:hover{
+    background: linear-gradient(
+        to bottom,
+        #ff5e00,
+        #ff9900,
+        #ffe066,
+        #ffffff
+    );
+}
+
+#instructions[hidden] {
+    display: none;
+}
+
+#instructions{
+    width: 100%;
+    height: 100vh;
+    z-index: 25;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("assets/img/fondo/foto1.png");
+    background-size: cover;          
+    background-position: center;     
+    background-repeat: no-repeat;    
+
+    font-family: 'Pixelify Sans', sans-serif;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+.instructions-container {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 30px 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.instructions-list{
+    list-style: decimal;
+    font-size: 20px;
+    padding: 0 0 0 40px;
+    margin: 0;
+    text-align: left;
+}
+
+.subtittle{
+    font-size: 30px;
+    margin: 0;
+    background: linear-gradient(
+        to bottom,
+        #ffffff,
+        #ffe066,
+        #ff9900,
+        #ff5e00
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px #7a2d00;
+}
+
+#game-over[hidden] {
+    display: none;
+}
+
+#game-over {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 50;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.7);
+    font-family: 'Pixelify Sans', sans-serif;
+}
+
+.game-over-card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px 60px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.game-over-stats {
+    font-size: 22px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.game-over-stats p {
+    margin: 0;
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 20px;
+}
 
 
 /* ------------- FONDO ------------------------*/
