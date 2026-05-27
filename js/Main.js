@@ -13,12 +13,12 @@ const CTX = CANVAS.getContext("2d");
 
 //Creacion del suelo
 const TILESET = new Image();
-TILESET.src = "/assets/img/tiles/tiles.png";
+TILESET.src = "assets/img/tiles/tiles.png";
 
 const LIFE_IMG = new Image();
-LIFE_IMG.src = "/assets/img/ChickenLeg.png";
+LIFE_IMG.src = "assets/img/ChickenLeg.png";
 
-const backgorundMusic = new Audio("/assets/audio/CanyonMoon.mpeg");
+const backgorundMusic = new Audio("assets/audio/CanyonMoon.mpeg");
 backgorundMusic.loop = true;
 backgorundMusic.volume = 0.5;
 
