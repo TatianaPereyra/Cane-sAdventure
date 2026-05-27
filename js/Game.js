@@ -4,6 +4,7 @@ import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
 import { drawLife } from "./Main.js";
 import { showScore } from "./Main.js";
+import { showTimer } from "./Main.js";
 import { Platform } from "./Platforms.js";
 
 export class Game{
@@ -15,15 +16,19 @@ export class Game{
         this.scroll = 0; //desplazamiento para el fondo
         this.score = 0;
         this.keys = new KeyController();
+        this.jumpPressed = false;
 
         this.premios = [];
-        setInterval(() => this.spawnChicken(), 2000);
 
         this.enemies = [];
         this.spawnEnemy();
 
         this.plataformas = [];
         this.generatePlatforms();
+
+        this.tiempoRestante = 90; //tiempo en segundos
+        this.timerInterval = null;
+        this.startTimer();
     }
 
     /**
@@ -42,18 +47,20 @@ export class Game{
 
         drawLife();
         showScore(this.score);
+        showTimer(this.tiempoRestante);
 
         this.player.setPrevY();
 
         this.handleInput();
+        this.handleColision();
         this.handlePlayer();
 
         this.updatePlatforms(); 
         this.recyclePlatforms();
-
-        this.handleColision();
+        this.updateChickens();
 
         this.enemies.forEach(enemy => {
+             console.log("velocidad enemigo:", -5 - this.scroll, "scroll:", this.scroll);
             enemy.setVelocidad(-5 - this.scroll);
             enemy.move();
         });
@@ -97,24 +104,32 @@ export class Game{
                 this.player.setEstado("running")
                 this.player.setVelocidad(5);
                 break;
+            case "jump": break;
         }
 
         if (this.player.posX >= this.margenX) {
             this.player.posX = this.margenX;
-            this.scroll = this.player.velocidad;
+
+            if (!this.player.isJumping) {
+                this.scroll = this.player.velocidad;
+            }
 
         } else {
-
             this.scroll = 0;
         }
 
         if(this.keys.getIsJumping()){
-            this.player.jump();
+            if(!this.jumpPressed && !this.player.isJumping){
+                this.player.jump();
+                this.jumpPressed = true;
+            }
+        } else {
+            this.jumpPressed = false; // resetea cuando suelta la tecla
         }
 
-        this.player.setPrevY();
         this.player.updateJump();
         this.player.move();
+
 
     }
 
@@ -127,10 +142,13 @@ export class Game{
     handleColision(){
         this.enemies.forEach(enemy => {
             if (this.hasColision(this.player, enemy)) {
+            enemy.playSound();
+
             this.enemies = this.enemies.filter(e => e !== enemy);//lo elimino
 
                 if(enemy.getType() === "dog"){
                     this.player.restLife();
+                    this.player.playHit();
                     this.score -= 100;
                 }
 
@@ -141,6 +159,8 @@ export class Game{
 
         this.premios.forEach(premio => {
             if(this.hasColision(this.player, premio)){
+                premio.playSound();
+                
                 this.premios = this.premios.filter(e => e !== premio);
 
                 this.score += 100;
@@ -210,9 +230,7 @@ export class Game{
             objA.getLeft() < objB.getRight() &&
             objA.getBottom() > objB.getTop() &&
             objA.getTop() < objB.getBottom()
-        );
-        
-        
+        );   
     }
 
     /**
@@ -229,10 +247,17 @@ export class Game{
     }
 
     spawnChicken(){
-        let chicken = new Chicken(900, 560);
+        let chicken = new Chicken(900 - this.scroll, 560);
         this.premios.push(chicken);
 
         chicken.init();
+    }
+
+    updateChickens() {
+        this.premios.forEach(premio => {
+            premio.posX -= this.scroll;
+            premio.elemento.style.left = premio.posX + "px"; // agregá esta línea
+        });
     }
 
     getScroll(){
@@ -268,30 +293,55 @@ export class Game{
         });
     }
 
-    /**
-     * Recicla las plataformas que han salido completamente de la pantalla por la izquierda.
-     */
     recyclePlatforms() {
         this.plataformas.forEach(plataforma => {
             // Si salió completamente de la pantalla por la izquierda
             if (plataforma.x + plataforma.width < 0) {
-                // Buscar la plataforma más a la derecha
                 let maxX = 0;
+                //encuentra la plataforma mas a la derecha
                 this.plataformas.forEach(p => {
                     if (p.x > maxX) maxX = p.x;
                 });
-                
-                // Reposicionarla al final con nueva altura aleatoria
-                plataforma.x = maxX + 300 + Math.floor(Math.random() * 200);
-                plataforma.y = 200 + Math.floor(Math.random() * 300);
-                plataforma.width = 150 + Math.floor(Math.random() * 150);
-                
+
+                let posibilidad = (Math.round(Math.random() * 5) + 1);
+
+                // Calcular la nueva posición primero
+                let newX = maxX + 300 + Math.floor(Math.random() * 200);
+                let newY = 200 + Math.floor(Math.random() * 300);
+                let newWidth = 150 + Math.floor(Math.random() * 150);
+
+                if (posibilidad % 2 === 0) {
+                    let chicken = new Chicken(newX + newWidth / 2 - this.scroll, newY - 50);
+                    this.premios.push(chicken);
+                    chicken.init();
+                } else if (posibilidad % 5 === 0) {
+                    this.spawnChicken();
+                }
+
+                plataforma.x = newX;
+                plataforma.y = newY;
+                plataforma.width = newWidth;
+
                 if (plataforma.elemento) {
                     plataforma.elemento.remove();
                     plataforma.elemento = null;
                 }
             }
-            });
+        });
+    }
+
+    /**
+     * Inicia un temporizador que decrementa el tiempo restante cada segundo.
+     *  Si el tiempo llega a cero finaliza el juego el juego.
+     */
+    startTimer() {
+        this.timerInterval = setInterval(() => {
+            this.tiempoRestante--;
+            if (this.tiempoRestante <= 0) {
+                clearInterval(this.timerInterval);
+                this.gameOver();
+            }
+        }, 1000);
     }
 
     getPlatforms(){
@@ -300,7 +350,7 @@ export class Game{
 
 
     gameOver(){
-        //finaliza el juego
+        this.player.setVidas(0);
     }
 
 }

@@ -6,6 +6,7 @@ export class Character{
         this.origenY = y;
     
         this.elemento = null;
+        this.sound = null;
         this.posX = this.origenX;
         this.posY = this.origenY;
         this.velocidad = 0;
@@ -49,4 +50,9 @@ export class Character{
     getVelocidad(){
         return this.velocidad;
     }   
+
+    playSound(){
+        this.sound.play();
+    }
+
 }

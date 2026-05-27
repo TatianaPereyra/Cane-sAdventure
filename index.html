@@ -4,52 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cane's Adventure</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!---------------------------------------------MENU------------------------------------------------->
-    <div id="menu">
+        <div id="menu">
 
-        <div id="start-content">
-
-            <ul>
-                <li>
+            <div class="info">
+                <div class="title">
                     <h1>Cane's Adventure</h1>
-                </li>
+                </div>
 
-                <li>
-                    <button id="start">Start Game</button>
-                </li>
+                <div class="description">
+                    <p>
+                        El objetivo del juego es obtener la mayor cantidad de puntos posible antes de que
+                        acabe el juego.
+                    </p>
+                </div>
+            </div>
 
-                <li>
-                    <button id="instructions">Instructions</button>
-                </li>
-            </ul>
+            <div class="buttons">
+
+                <button id="start">
+                    Comenzar Juego
+                </button>
+
+                <button id="instructions">
+                    Instrucciones
+                </button>
+
+            </div>
 
         </div>
 
-        <div id="instructions">
+        <div id="instructions" hidden>
 
             <ul>
                 <li> 
-                    <h2>How to Play</h2>
+                    <h2>Instrucciones</h2>
                 </li>
 
-                <li>Press ArrowUp o Space Bar for Jump, press ArrowRight or D for walk and pres shift + ArrowRigut/D for run</li>
-                <li>The game's objetive is go to the finish line before the time out, and trying to colect the most number
-                    of prices (chicken) for get a better score.
-                </li>
-                <li>The dogs provokes that you loss 100 point and a life</li>
-                <li>You got 3 lifes, if u loses all of these, you're going to loss</li>
-                
+                <li>Para avanzar, presiona D o  para caminar. Para correr, mantén presionada la tecla Shift junto con la tecla para caminar</li>
+                <li>Para saltar, presiona la barra espaciadora, W o ↑</li>
+                <li>Los perros provocan que pierdas 100 puntos y una vida, ¡Cuidado!</li>
+                <li>Tienes 3 vidas, si pierdes todas, perderás el juego</li>
+
                 <li>
-                    <h3>Some TIPS:</h3>
+                    <h3>Algunos consejos:</h3>
                 </li>
 
-                <li>For a better Jump, you must be runnign before jump</li>
-                <li>After jump, if u want to run again, u need to press the keys again</li>
-                <li>Be careful with the dogs</li>
+                <li>Para un mejor salto, debes estar corriendo antes de saltar</li>
+                <li>Después de saltar, si quieres continuar corriendo, necesitas presionar las teclas nuevamente</li>
+                <li>Presta atencion a los enemigos y las diferentes plataformas de juego. ¡Los premios aparecen por todos lados!</li>
             </ul>
 
         </div>
@@ -58,7 +70,7 @@
 
     <!-------------------------------------------GAME-------------------------------------------------->
     
-    <div id="main-container">
+    <div id="main-container" hidden>
 
         <div id="sky-background"></div>
 

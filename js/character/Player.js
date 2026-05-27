@@ -4,6 +4,7 @@ export class Player  extends Character{
     constructor(x, y,) {
         super(x, y);
         this.elemento = document.querySelector("#player");
+        this.sound = new Audio("../assets/audio/jump.mpeg");
         this.estado = "idle";
         this.vidas = 3;
         this.currentPlatform = null;
@@ -18,8 +19,8 @@ export class Player  extends Character{
         this.scale = 4;
         this.width = 54 * this.scale;
         this.height = 32 * this.scale;
-        this.offsetX = 40;
-        this.offsetY = 60;
+        this.offsetX = 30;
+        this.offsetY = 50;
     }
 
 
@@ -30,10 +31,13 @@ export class Player  extends Character{
     }
 
     jump() {
+         console.log("jump() llamado, isJumping:", this.isJumping);
         if (this.isJumping) return;
         this.isJumping = true;
         this.velY = -this.jumpForce; // impulso hacia arriba
         this.setEstado("jump-up");
+        
+        this.playSound();
     }
 
     /**
@@ -42,11 +46,8 @@ export class Player  extends Character{
      * 
      * @returns corta en caso de que no este saltando (evita salto constante)
      */
-
     updateJump() {
-        if (!this.isJumping) {
-            return;
-        }
+        if (!this.isJumping) return;
 
         this.velY += this.gravedad;
         this.posY += this.velY;
@@ -55,15 +56,15 @@ export class Player  extends Character{
             this.setEstado("jump-down");
         }
 
-        // si está en una plataforma actual, no lo dejes caer hasta el origen
         if (this.currentPlatform) {
             if (this.posY + this.height >= this.currentPlatform.y) {
                 this.posY = this.currentPlatform.y - this.height;
                 this.isJumping = false;
                 this.velY = 0;
+                this.currentPlatform = null;
                 this.setEstado("idle");
             }
-        } else if (this.posY >= this.origenY) {
+        } else if (this.posY >= this.origenY) {  // >= atrapa el sobrepaso
             this.posY = this.origenY;
             this.isJumping = false;
             this.velY = 0;
@@ -96,8 +97,19 @@ export class Player  extends Character{
         }
     }
 
+    playHit() {
+        this.elemento.classList.add("hit");
+        this.elemento.addEventListener("animationend", () => {
+            this.elemento.classList.remove("hit");
+        }, { once: true }); // once: true para que se desregistre solo
+    }
+
     getVidas(){
         return this.vidas;
+    }
+
+    setVidas(vidas){
+        this.vidas = vidas;
     }
 
     setCurrentPlatform(platform){

@@ -15,6 +15,10 @@ const CTX = CANVAS.getContext("2d");
 const TILESET = new Image();
 TILESET.src = "../assets/img/tiles/tiles.png";
 
+const backgorundMusic = new Audio("../assets/audio/HarryStyles-ToBeSoLonely(instrumental).mpeg");
+backgorundMusic.loop = true;
+backgorundMusic.volume = 0.5;
+
 let fondoX = 0; //donde comienzo a crear el suelo
 
 let tiles = [];
@@ -28,17 +32,13 @@ for (let i = 0; i < cantidadTiles; i++) {
 const PLAYER = new Player(100, 500, CTX);
 PLAYER.init();
 let playerX = 100;
-let playerY = 510;
+let playerY = 500;
  
 
 //Manejo del juego
 const game = new Game(PLAYER);
 let gameOver = false;
 
-
-TILESET.onload = () => {
-    renderizar();
-};
 
 
 //-------------------------------------------------------------------------------------------
@@ -82,14 +82,12 @@ function generatePlataformas() {
             p.elemento = el;
         }
         
-        p.elemento.style.left = (p.x - game.getScroll()) + "px";
+        p.elemento.style.left = p.x + "px"; // ← sin restar scroll
         p.elemento.style.top = p.y + "px";
         p.elemento.style.width = p.width + "px";
         p.elemento.style.height = p.height + "px";
 
-        // Solo mostrar si está en pantalla o a punto de entrar
-        if (p.x - game.getScroll() < CANVAS.width + 200 && 
-            p.x - game.getScroll() + p.width > -200) {
+        if (p.x < CANVAS.width + 200 && p.x + p.width > -200) {
             p.elemento.style.display = "block";
         } else {
             p.elemento.style.display = "none";
@@ -130,4 +128,38 @@ export function showScore(score) {
     CTX.fillText("Score: " + score, CANVAS.width - 170, 50);
 }
 
+//Dibuja el tiempo restante de la partida
+export function showTimer(tiempo) {
+    const x = CANVAS.width / 2;
+    const y = 20;
+    const w = 120;
+    const h = 45;
 
+    CTX.fillStyle = "#ff0000";
+    CTX.beginPath();
+    CTX.roundRect(x - w/2 - 3, y - 3, w + 6, h + 6, 5);
+    CTX.fill();
+
+    CTX.fillStyle = "#ffffff";
+    CTX.beginPath();
+    CTX.roundRect(x - w/2, y, w, h, 8);
+    CTX.fill();
+
+    // Si llega a 10 segundos, se pone en rojo
+    CTX.fillStyle = tiempo <= 10 ? "#ff0000" : "#000000";
+    CTX.font = "bold 26px 'Courier New'";
+    CTX.textAlign = "center";
+    CTX.textBaseline = "middle";
+    CTX.fillText(tiempo + "s", x, y + h / 2);
+
+    CTX.textAlign = "left";
+    CTX.textBaseline = "alphabetic";
+}
+
+document.querySelector("#start").addEventListener("click", () => {
+    document.querySelector("#menu").hidden = true;
+    document.querySelector("#instructions").hidden = true;
+    document.querySelector("#main-container").hidden = false;
+    backgorundMusic.play();
+    renderizar();
+});
