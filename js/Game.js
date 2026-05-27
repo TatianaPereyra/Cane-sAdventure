@@ -20,6 +20,7 @@ export class Game{
         this.premios = [];
 
         this.enemies = [];
+        this.enemyTimeOut = null;
         this.spawnEnemy();
 
         this.plataformas = [];
@@ -245,7 +246,10 @@ export class Game{
         this.enemies.push(enemigo);
 
         let intervalo = 5000 + Math.random() * 1000;
-        setTimeout(() => this.spawnEnemy(), intervalo);
+
+        this.enemyTimeout = setTimeout(() => {
+            this.spawnEnemy();
+        }, intervalo);
     }
 
     spawnChicken(){
@@ -355,6 +359,7 @@ export class Game{
         this.isGameOver = true;
         this.player.setVidas(0);
         clearInterval(this.timerInterval);
+        clearTimeout(this.enemyTimeout);
 
         if(this.score < 0) this.score = 0;
 
