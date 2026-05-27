@@ -16,7 +16,7 @@ const TILESET = new Image();
 TILESET.src = "./assets/img/tiles/tiles.png";
 
 const LIFE_IMG = new Image();
-LIFE_IMG.src = "./assets/img/tiles/ChickenLeg.png";
+LIFE_IMG.src = "./assets/img/ChickenLeg.png";
 
 const backgorundMusic = new Audio("./assets/audio/CanyonMoon.mpeg");
 backgorundMusic.loop = true;
