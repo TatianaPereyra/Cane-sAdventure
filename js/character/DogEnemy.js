@@ -4,7 +4,7 @@ export class DogEnemy extends Character{
     constructor(x, y){
         super(x, y);
         this.contenedor = null;
-        this.sound = new Audio("../../assets/audio/dogSound.mp3");
+        this.sound = new Audio("/assets/audio/dogSound.mp3");
         this.velocidad = -5; //velocidad por defecto (hacia la izquierda)
         this.elemento = null;
         this.type = "dog";

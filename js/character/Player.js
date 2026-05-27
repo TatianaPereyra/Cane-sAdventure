@@ -4,7 +4,7 @@ export class Player  extends Character{
     constructor(x, y,) {
         super(x, y);
         this.elemento = document.querySelector("#player");
-        this.sound = new Audio("../../assets/audio/jump.mpeg");
+        this.sound = new Audio("/assets/audio/jump.mpeg");
         this.estado = "idle";
         this.vidas = 3;
         this.currentPlatform = null;
