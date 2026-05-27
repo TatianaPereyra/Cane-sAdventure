@@ -35,7 +35,7 @@ body {
         "buttons . info"
         "buttons . .";
 
-    background-image: url("assets/img/fondo/foto1.png");
+    background-image: url("./assets/img/fondo/foto1.png");
     background-size: cover;          
     background-position: center;     
     background-repeat: no-repeat;    
@@ -148,7 +148,7 @@ button:hover{
     justify-content: center;
     align-items: center;
 
-    background-image: url("assets/img/fondo/foto1.png");
+    background-image: url("./assets/img/fondo/foto1.png");
     background-size: cover;          
     background-position: center;     
     background-repeat: no-repeat;    
@@ -252,7 +252,7 @@ button:hover{
     top: 0;
     left: 0;
 
-    background: url("assets/img/background/Clouds1/1.png") repeat-x;
+    background: url("./assets/img/background/Clouds1/1.png") repeat-x;
     background-size: 1280px 100%;
 
     animation: cielo 150s linear infinite;
@@ -266,7 +266,7 @@ button:hover{
     top: 0;
     left: 0;
 
-    background: url("assets/img/background/Clouds1/2.png") repeat-x;
+    background: url("./assets/img/background/Clouds1/2.png") repeat-x;
     background-size: 1280px auto;
 
     animation: clouds 150s linear infinite;
@@ -281,7 +281,7 @@ button:hover{
     top: 0;
     left: 0;
 
-    background: url("assets/img/background/Clouds1/4.png") repeat-x;
+    background: url("./assets/img/background/Clouds1/4.png") repeat-x;
     background-size: 1280px auto;
 
     animation: clouds 100s linear infinite;
@@ -297,7 +297,7 @@ button:hover{
     width: 32px;
     height: 32px;
 
-    background-image: url("assets/img/tiles/tiles2.png");
+    background-image: url("./assets/img/tiles/tiles2.png");
     background-position: 0px 0px;
     background-repeat: repeat-x;
 
@@ -338,7 +338,7 @@ button:hover{
     left:100px;
     overflow: hidden;
 
-    background-image:url("assets/img/character/cane.png");
+    background-image:url("./assets/img/character/cane.png");
     background-repeat:no-repeat;
 
     transform:scale(4) translateY(6px);
@@ -430,7 +430,7 @@ button:hover{
     height: 48px;
     position: absolute;
 
-    background-image: url("assets/img/Walk.png");
+    background-image: url("./assets/img/Walk.png");
 
     transform: scale(4);
     z-index: 2;
@@ -458,7 +458,7 @@ button:hover{
     height: 48px;
     position: absolute;
 
-    background-image: url("assets/img/chicken-idle.png");
+    background-image: url("./assets/img/chicken-idle.png");
 
     transform: scale(2);
 

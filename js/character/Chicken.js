@@ -5,7 +5,7 @@ export class Chicken extends Character{
         super(x, y);
         this.elemento = null;
         this.contenedor = null;
-        this.sound = new Audio("../assets/audio/chickenSound.mp3");
+        this.sound = new Audio("../../assets/audio/chickenSound.mp3");
 
         this.scale = 2;
         this.width = 48;

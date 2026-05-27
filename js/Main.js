@@ -13,9 +13,12 @@ const CTX = CANVAS.getContext("2d");
 
 //Creacion del suelo
 const TILESET = new Image();
-TILESET.src = "../assets/img/tiles/tiles.png";
+TILESET.src = "./assets/img/tiles/tiles.png";
 
-const backgorundMusic = new Audio("../assets/audio/HarryStyles-CanyonMoon(instrumental).mpeg");
+const LIFE_IMG = new Image();
+LIFE_IMG.src = "./assets/img/tiles/ChickenLeg.png";
+
+const backgorundMusic = new Audio("./assets/audio/CanyonMoon.mpeg");
 backgorundMusic.loop = true;
 backgorundMusic.volume = 0.5;
 
@@ -133,11 +136,8 @@ function renderizar() {
 
 //Dibuja la cantidad de vidas del jugador
 export function drawLife() {
-    let life = new Image();
-    life.src = "../assets/img/ChickenLeg.png";
-
     for(let i = 0; i < PLAYER.getVidas(); i++){
-        CTX.drawImage(life, 20 + i * 40, 20, 60, 60)
+        CTX.drawImage(LIFE_IMG, 20 + i * 40, 20, 60, 60);
     }
 
 }
@@ -191,6 +191,11 @@ export function showGameOverScreen(score, tiempoRestante) {
 
 // Inicio de juego
 document.querySelector("#start").addEventListener("click", () => {
+
+    TILESET.onload = () => {
+        renderizar();
+    };
+
     document.querySelector("#menu").hidden = true;
     document.querySelector("#instructions").hidden = true;
     document.querySelector("#main-container").hidden = false;
