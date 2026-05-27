@@ -40,3 +40,7 @@ El desafío consiste en sobrevivir el mayor tiempo posible y alcanzar la puntuac
 - HTML5 Canvas
 - CSS3
 
+## Warning
+Actualmente las plataformas pueden presentar algunos bugs de colisión debido al sistema de físicas implementado.  
+En determinadas situaciones, el jugador puede quedar sujeto o colisionar desde distintos lados de la plataforma y no únicamente desde la parte superior central.
+
