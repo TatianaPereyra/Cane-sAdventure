@@ -1,7 +1,7 @@
 import { Character } from "./Character.js";
 
 export class Player  extends Character{
-    constructor(x, y,) {
+    constructor(x, y) {
         super(x, y);
         this.elemento = document.querySelector("#player");
         this.sound = new Audio("assets/audio/jump.mpeg");
@@ -31,7 +31,6 @@ export class Player  extends Character{
     }
 
     jump() {
-         console.log("jump() llamado, isJumping:", this.isJumping);
         if (this.isJumping) return;
         this.isJumping = true;
         this.velY = -this.jumpForce; // impulso hacia arriba
@@ -64,10 +63,10 @@ export class Player  extends Character{
                 this.currentPlatform = null;
                 this.setEstado("idle");
             }
-        } else if (this.posY >= this.origenY) {  // >= atrapa el sobrepaso
-            this.posY = this.origenY;
-            this.isJumping = false;
-            this.velY = 0;
+        } else if (this.posY >= this.origenY) { 
+            this.setPosY(this.origenY);
+            this.setIsJumping(false);
+            this.setVelY(0);
             this.setEstado("idle");
         }
 
@@ -122,5 +121,25 @@ export class Player  extends Character{
 
     setPrevY(){
         this.prevY = this.posY;
+    }
+
+    getPrevY(){
+        return this.prevY;
+    }
+
+    getIsJumping(){
+        return this.isJumping;
+    }
+
+    getVelY(){
+        return this.velY;
+    }
+
+    setVelY(velY){
+        this.velY = velY;
+    }
+
+    setIsJumping(isJumping){
+        this.isJumping = isJumping;
     }
 }

@@ -1,4 +1,5 @@
 import { Character } from "./character/Character.js";
+import { Player } from "./character/Player.js";
 import { Chicken } from "./character/Chicken.js";
 import { DogEnemy } from "./character/DogEnemy.js";
 import { KeyController } from "./KeyController.js";
@@ -6,8 +7,9 @@ import { drawLife, showScore, showTimer, showGameOverScreen } from "./Main.js";
 import { Platform } from "./Platforms.js";
 
 export class Game{
-    constructor(player){
-        this.player = player;
+    constructor(){
+        this.player = new Player(100, 500);
+        this.player.init();
         this.estadoJugador = "idle";
         this.margenX = 800; //cuantos px puede avanzar el jugador hasta que comience a avanzar la pantalla
         this.isGameOver = false;
@@ -37,8 +39,7 @@ export class Game{
      * incluyendo el movimiento del jugador, el desplazamiento del fondo,
      *  la generación y actualización de plataformas, y la verificación de colisiones.
      */
-    gameLoop() {
-
+    handleGame() {
         if (this.player.getVidas() === 0) {
             this.gameOver();
             return;
@@ -63,7 +64,6 @@ export class Game{
         this.updateChickens();
 
         this.enemies.forEach(enemy => {
-             console.log("velocidad enemigo:", -5 - this.scroll, "scroll:", this.scroll);
             enemy.setVelocidad(-5 - this.scroll);
             enemy.move();
         });
@@ -110,11 +110,11 @@ export class Game{
             case "jump": break;
         }
 
-        if (this.player.posX >= this.margenX) {
-            this.player.posX = this.margenX;
+        if (this.player.getPosX() >= this.margenX) {
+            this.player.setPosX(this.margenX);
 
-            if (!this.player.isJumping) {
-                this.scroll = this.player.velocidad;
+            if (!this.player.getIsJumping()) {
+                this.scroll = this.player.getVelocidad();
             }
 
         } else {
@@ -122,7 +122,7 @@ export class Game{
         }
 
         if(this.keys.getIsJumping()){
-            if(!this.jumpPressed && !this.player.isJumping){
+            if(!this.jumpPressed && !this.player.getIsJumping()){
                 this.player.jump();
                 this.jumpPressed = true;
             }
@@ -183,9 +183,9 @@ export class Game{
         this.plataformas.forEach(plataforma => {
             if (this.hasColision(this.player, plataforma)) {
                 // solo si viene cayendo
-                if (this.player.velY >= 0) {
+                if (this.player.getVelY() >= 0) {
                     //calcula el centro horizontal del jugador.
-                    let playerCenterX = this.player.posX + this.player.width / 2;
+                    let playerCenterX = this.player.getPosX() + this.player.getWidth() / 2;
                     //verifico si esta dentro de la plataforma en el eje X
                     let onPlatformX =
                         playerCenterX > plataforma.getLeft() &&
@@ -193,9 +193,9 @@ export class Game{
 
                     if (onPlatformX) {
                         // se apoya sobre la plataforma y detiene su caida
-                        this.player.posY = plataforma.getTop() - this.player.height;
-                        this.player.isJumping = false;
-                        this.player.velY = 0;
+                        this.player.setPosY(plataforma.getTop() - this.player.getHeight());
+                        this.player.setIsJumping(false);
+                        this.player.setVelY(0);
                         this.player.setEstado("idle");
                         this.player.setCurrentPlatform(plataforma); //almacena la plataforma actual
                     }
@@ -207,10 +207,10 @@ export class Game{
         if (this.player.currentPlatform) {
             let p = this.player.currentPlatform;
             //verifico si el jugador se salió por la izquierda o derecha de la plataforma. Si es así, lo dejo caer nuevamente.
-            if (this.player.getRight() < p.x || this.player.getLeft() > p.x + p.width) {
-                this.player.isJumping = true;
-                this.player.velY = 1; 
-                this.player.currentPlatform = null;
+            if (this.player.getRight() < p.getPosX() || this.player.getLeft() > p.getPosX() + p.getWidth()) {
+                this.player.setIsJumping(true);
+                this.player.setVelY(0); // resetea velocidad vertical para que la caída no sea brusca 
+                this.player.setCurrentPlatform(null);
             }
         }
 
@@ -261,8 +261,8 @@ export class Game{
 
     updateChickens() {
         this.premios.forEach(premio => {
-            premio.posX -= this.scroll;
-            premio.elemento.style.left = premio.posX + "px"; // agregá esta línea
+            premio.setPosX(premio.getPosX() - this.scroll);
+            premio.elemento.style.left = premio.getPosX() + "px"; // agregá esta línea
         });
     }
 
@@ -295,18 +295,18 @@ export class Game{
     //Actualizo la posicion de la plataforma segun el scroll del fondo, para que se muevan junto con el jugador
     updatePlatforms() {
         this.plataformas.forEach(plataforma => {
-            plataforma.x -= this.scroll;  
+            plataforma.setPosX(plataforma.getPosX() - this.scroll);
         });
     }
 
     recyclePlatforms() {
         this.plataformas.forEach(plataforma => {
             // Si salió completamente de la pantalla por la izquierda
-            if (plataforma.x + plataforma.width < 0) {
+            if (plataforma.getPosX() + plataforma.getWidth() < 0) {
                 let maxX = 0;
                 //encuentra la plataforma mas a la derecha
                 this.plataformas.forEach(p => {
-                    if (p.x > maxX) maxX = p.x;
+                    if (p.getPosX() > maxX) maxX = p.getPosX();
                 });
 
                 let posibilidad = (Math.round(Math.random() * 5) + 1);
@@ -324,9 +324,9 @@ export class Game{
                     this.spawnChicken();
                 }
 
-                plataforma.x = newX;
-                plataforma.y = newY;
-                plataforma.width = newWidth;
+                plataforma.setPosX(newX);
+                plataforma.setPosY(newY);
+                plataforma.setWidth(newWidth);
 
                 if (plataforma.elemento) {
                     plataforma.elemento.remove();
@@ -364,6 +364,14 @@ export class Game{
         if(this.score < 0) this.score = 0;
 
         showGameOverScreen(this.score, this.tiempoRestante);
+    }
+
+    getPlayer(){
+        return this.player;
+    }
+
+    getIsGameOver(){
+        return this.isGameOver;
     }
 
 }

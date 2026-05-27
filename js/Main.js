@@ -29,17 +29,10 @@ let cantidadTiles = Math.ceil(CANVAS.width / 128) + 2;
 
 for (let i = 0; i < cantidadTiles; i++) {
     tiles.push(i * 128);
-}
-
-//inicializo jugador con las coordenadas donde se debe dibujar
-const PLAYER = new Player(100, 500, CTX);
-PLAYER.init();
-let playerX = 100;
-let playerY = 500;
- 
+} 
 
 //Manejo del juego
-let game = new Game(PLAYER);
+let game = new Game();
 
 
 
@@ -97,27 +90,25 @@ function generatePlataformas() {
     });
 }
 
-function reiniciarJuego() {
-    // Limpiar DOM
-    document.querySelector("#platforms").innerHTML = "";
-    document.querySelector("#chicken").innerHTML = "";
-    document.querySelector("#enemies").innerHTML = "";
-
-    // Reiniciar player
-    PLAYER.posX = 100;
-    PLAYER.posY = 500;
-    PLAYER.vidas = 3;
-    PLAYER.isJumping = false;
-    PLAYER.velY = 0;
-    PLAYER.currentPlatform = null;
-    PLAYER.setEstado("idle");
-
-    // Recrear el juego
-    game = new Game(PLAYER);
+function reiniciar() {
+    document.querySelector("#platforms").innerHTML = ""; 
+    document.querySelector("#player").className = "inactive"; 
+    document.querySelector("#enemies").innerHTML = ""; 
+    document.querySelector("#chicken").innerHTML = ""; 
+    
     fondoX = 0;
+
+    // cortar timers del juego anterior
+    if (game) {
+        clearInterval(game.timerInterval);
+        clearTimeout(game.enemyTimeout);
+    }
+
+    game = new Game(); // nueva partida limpia
 }
+
 //Renderizado del juego. Se encarga de dibujar el fondo, las plataformas y el jugador en cada frame.
-function renderizar() {
+function gameLoop() {
     CTX.imageSmoothingEnabled = false;
     CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
@@ -127,16 +118,16 @@ function renderizar() {
     generateFloor(offset);
     generatePlataformas();
 
-    game.gameLoop();
+    game.handleGame();
 
-    if(!game.isGameOver) { //corto el loop de renderizado si el juego terminó
-        requestAnimationFrame(renderizar);
+    if(!game.getIsGameOver()) { //corto el loop de renderizado si el juego terminó
+        requestAnimationFrame(gameLoop);
     }
 }
 
 //Dibuja la cantidad de vidas del jugador
 export function drawLife() {
-    for(let i = 0; i < PLAYER.getVidas(); i++){
+    for(let i = 0; i < game.getPlayer().getVidas(); i++){
         CTX.drawImage(LIFE_IMG, 20 + i * 40, 20, 60, 60);
     }
 
@@ -190,17 +181,19 @@ export function showGameOverScreen(score, tiempoRestante) {
 
 
 // Inicio de juego
-document.querySelector("#start").addEventListener("click", () => {
+document.querySelector("#start").addEventListener("click", (e) => {
+    e.target.blur();
 
-    TILESET.onload = () => {
-        renderizar();
-    };
+    reiniciar();
 
     document.querySelector("#menu").hidden = true;
     document.querySelector("#instructions").hidden = true;
     document.querySelector("#main-container").hidden = false;
+    document.querySelector("#game-over").hidden = true;
+    
+
     backgorundMusic.play();
-    renderizar();
+    gameLoop();
 });
 
 // Instrucciones
@@ -216,14 +209,17 @@ document.querySelector("#back").addEventListener("click", () => {
 });
 
 // Reiniciar desde game over
-document.querySelector("#restart-btn").addEventListener("click", () => {
+document.querySelector("#restart-btn").addEventListener("click", (e) => {
+    e.target.blur();
+
     document.querySelector("#game-over").hidden = true;
     document.querySelector("#main-container").hidden = false;
-    reiniciarJuego();
+
+    reiniciar();
 
     backgorundMusic.currentTime = 0; // reinicia desde el principio
     backgorundMusic.play();
-    renderizar();
+    gameLoop();
 });
 
 // Volver al menú desde game over

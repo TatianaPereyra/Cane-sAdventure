@@ -27,6 +27,22 @@ export class Character{
         this.elemento.style.left = this.posX + "px";
     }
 
+    getWidth(){
+        return this.width;
+    }
+
+    getHeight(){
+        return this.height;
+    }
+
+    getPosX(){
+        return this.posX;
+    }
+
+    getPosY(){
+        return this.posY;
+    }
+
     getTop(){
         return this.posY + this.offsetY;
     }
@@ -53,6 +69,14 @@ export class Character{
 
     playSound(){
         this.sound.play();
+    }
+
+    setPosX(newX){
+        this.posX = newX;
+    }
+
+    setPosY(newY){
+        this.posY = newY;
     }
 
 }

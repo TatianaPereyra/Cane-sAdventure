@@ -11,6 +11,22 @@ export class Platform {
         this.elemento = null;
     }
 
+    getPosX(){
+        return this.x;
+    }
+
+    getPosY(){
+        return this.y;
+    }
+
+    setPosX(newX){
+        this.x = newX;
+    }
+
+    setPosY(newY){
+        this.y = newY;
+    }
+
     getLeft(){
         return this.x + this.offsetX;
     }   
@@ -26,4 +42,17 @@ export class Platform {
     getBottom(){
         return this.y + this.height - this.offsetY;
     }
+
+    setWidth(newWidth){
+        this.width = newWidth;
+    }
+
+    getWidth(){
+        return this.width;
+    }
+
+    getHeight(){
+        return this.height;
+    }
+
 }
